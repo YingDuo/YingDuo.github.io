@@ -12,7 +12,7 @@
     
     
     
-    <title>第一个javaweb程序，doGet和doPost的区别 | YD</title>
+    <title>java异常体系 | YD</title>
     <link href=”https://YingDuo.github.io“ rel=”prefetch” />
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -191,13 +191,13 @@
         <i class="fa fa-home"></i>
         <a href="https://YingDuo.github.io">YD</a>
         >
-        <span>第一个javaweb程序，doGet和doPost的区别</span>
+        <span>java异常体系</span>
     </div>
     <!-- 大型设备详细文章 -->
     <div class="hidden-xs">
         <div class="title-article">
             <h1>
-                <a href="/2018/07/02/javaweb1/">第一个javaweb程序，doGet和doPost的区别</a>
+                <a href="/2018/07/06/java异常体系/">java异常体系</a>
             </h1>
         </div>
         <div class="tag-article">
@@ -205,12 +205,12 @@
             <span class="label label-gal">
                 <i class="fa fa-tags"></i>
                 
-                <a href="/tags/javaweb/">javaweb</a>
+                <a href="/tags/javase/">javase</a>
                 
             </span>
             
             <span class="label label-gal">
-                <i class="fa fa-calendar"></i> 2018-07-02
+                <i class="fa fa-calendar"></i> 2018-07-06
             </span>
             
         </div>
@@ -220,17 +220,17 @@
         <center>
             <div class="title-article">
                 <h4>
-                    <a href="/2018/07/02/javaweb1/">第一个javaweb程序，doGet和doPost的区别</a>
+                    <a href="/2018/07/06/java异常体系/">java异常体系</a>
                 </h4>
             </div>
             <p>
-                <i class="fa fa-calendar"></i> 2018-07-02
+                <i class="fa fa-calendar"></i> 2018-07-06
             </p>
             <p>
                 
                 <i class="fa fa-tags"></i>
                 
-                <a href="/tags/javaweb/">javaweb</a>
+                <a href="/tags/javase/">javase</a>
                 
                 
                 
@@ -238,7 +238,21 @@
         </center>
     </div>
     <div class="content-article">
-        <h1 id="servlet"><a href="#servlet" class="headerlink" title="servlet"></a>servlet</h1><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MyServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> static <span class="keyword">final</span> long serialVersionUID = <span class="number">1</span>L;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// doGet和doPost的区别</span></span><br><span class="line">	<span class="comment">// doGet方法可以通过地址栏直接访问 不安全 doPost方法只能通过表单来访问</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">protected</span> void doGet(<span class="type">HttpServletRequest</span> req, <span class="type">HttpServletResponse</span> resp)</span><br><span class="line">			<span class="keyword">throws</span> <span class="type">ServletException</span>, <span class="type">IOException</span> &#123;</span><br><span class="line">		<span class="type">System</span>.out.println(<span class="string">"doget"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="keyword">protected</span> void doPost(<span class="type">HttpServletRequest</span> req, <span class="type">HttpServletResponse</span> resp)</span><br><span class="line">			<span class="keyword">throws</span> <span class="type">ServletException</span>, <span class="type">IOException</span> &#123;</span><br><span class="line">		<span class="type">System</span>.out.println(<span class="string">"doPost"</span>);</span><br><span class="line">		<span class="comment">// 使用request对象来取页面上的对象</span></span><br><span class="line">		<span class="comment">// 转码必须放在第一句</span></span><br><span class="line">		req.setCharacterEncoding(<span class="string">"UTF-8"</span>);</span><br><span class="line">		<span class="type">String</span> username = req.getParameter(<span class="string">"username"</span>);</span><br><span class="line">		<span class="type">String</span> upassword = req.getParameter(<span class="string">"upassword"</span>);</span><br><span class="line">		<span class="type">System</span>.out.println(username);</span><br><span class="line">		<span class="type">System</span>.out.println(upassword);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h1 id="一、java异常体系结构"><a href="#一、java异常体系结构" class="headerlink" title="一、java异常体系结构"></a>一、java异常体系结构</h1><h2 id="1-Throwable"><a href="#1-Throwable" class="headerlink" title="1.Throwable"></a>1.Throwable</h2><p>Throwable类是所有错误和异常的超类，有两个子类Error和Exception，分别表示错误和异常。</p>
+<h2 id="2-Error与Exception"><a href="#2-Error与Exception" class="headerlink" title="2.Error与Exception"></a>2.Error与Exception</h2><p>Error是程序无法处理的错误。Error发生时，java虚拟机一般会选择线程终止<br>Exception是程序自身可以处理的异常，分为两大类：运行时异常和非运行时异常，程序中应当尽可能得去处理这些异常。</p>
+<h2 id="3-运行时异常和非运行时异常"><a href="#3-运行时异常和非运行时异常" class="headerlink" title="3.运行时异常和非运行时异常"></a>3.运行时异常和非运行时异常</h2><p>运行时异常又叫不检查异常，都是RuntimeException类以及其子类异常，程序中可以选择捕获处理，也可以不处理。一般都是由于程序逻辑错误引起，程序应当从逻辑角度尽可能避免这类异常的发生。常见的运行时异常：ArrayIndexOutOfBoundsException数组越界访问，ArrayStoreException数据存储异常，写数组操作时，对象或者数据类型不兼容，ClassCastException类型转换异常，ArithmeticException算术运算中，被0除或模除，OutOfMemoryException内存不足，通常发生于创建对象之时</p>
+<p>非运行时异常是RuntimeException以外的异常，类型上都属于Exception类及其子类。从程序语法角度讲是必须进行处理的异常，如果不处理，程序就不能编译通过。常见的非运行时异常：IOException、SQLException、用户自定义异常</p>
+<h1 id="二、异常的捕获和处理"><a href="#二、异常的捕获和处理" class="headerlink" title="二、异常的捕获和处理"></a>二、异常的捕获和处理</h1><p>JAVA异常处理涉及到五个关键字，分别是try,catch,finally,throw,throws.</p>
+<h2 id="1-异常处理的基本语法"><a href="#1-异常处理的基本语法" class="headerlink" title="1.异常处理的基本语法"></a>1.异常处理的基本语法</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//尝试运行的程序代码</span></span><br><span class="line">&#125; <span class="keyword">catch</span>(异常类型  异常的变量名)&#123;</span><br><span class="line">    <span class="comment">//异常处理代码</span></span><br><span class="line">&#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">    <span class="comment">//异常发生，方法返回之前，总是要执行的代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>try语句块，表示要尝试运行代码，try语句块中的代码受异常监控，其中代码发生异常时，会抛出异常对象</p>
+<p>catch语句块会捕获try代码块中发生的异常并在其代码块中做处理，catch语句带一个Throwable类型的参数，表示可捕获异常类型。当try中出现异常时，catch会捕获到发生的异常，并和自己的异常类型匹配，若匹配，则执行catch块中代码，并将catch块参数指向所抛的异常对象。catch语句可以有多个，用来匹配多个中的一个异常，一旦匹配上后，就不再尝试匹配别的catch块了。通过异常对象可以获取异常发生时完整的JVM堆栈信息，以及异常信息和异常发生的原因等。</p>
+<p>finally语句块是紧跟catch语句后的语句块，这个语句块总是会在方法返回前执行，而不管try语句块是否发生异常。目的是给程序一个补救的机会，这样做也体现了Java语言的及健壮性。</p>
+<h2 id="2-try、catch、finally三个语句块应注意的问题"><a href="#2-try、catch、finally三个语句块应注意的问题" class="headerlink" title="2.try、catch、finally三个语句块应注意的问题"></a>2.try、catch、finally三个语句块应注意的问题</h2><p>①try、catch、finally三个语句块均不能单独使用。组合形式：try…catch…finally,try…catch,trytry…finally(catch可以有一或多个)</p>
+<p>②try、catch、finally三个代码块中变量的作用域为代码块内部，分别独立而不能相互访问。如果要在三个块中都可以访问，则需要将变量定义到这些块的外面</p>
+<p>③多个catch块的时候，匹配顺序从上到下，一旦匹配其中一个异常类就执行catch代码，而不会再执行别的catch块</p>
+<h2 id="3-throw和throws"><a href="#3-throw和throws" class="headerlink" title="3.throw和throws"></a>3.throw和throws</h2><p>throw关键字是用于方法体内部，用来抛出一个Throwable类型的异常。如果抛出了检查异常，则还应该在方法头部声明方法可能抛出的异常类型。该方法的调用者也必须检查处理抛出的异常。如果所有方法都层层上抛获取的异常，最终JVM会进行处理。处理也很简单，就是打印异常消息和堆栈信息。如果抛出的是Error或RuntimeException，则该方法的调用者可选择处理该异常</p>
+<p>throws关键字用于方法体外部的方法声明部分，用来声明方法可能会抛出某些异常。仅当抛出了检查异常，该方法的调用者才必须处理或者重新抛出该异常。当方法的调用者无力处理该异常时，应该继续抛出，而不是在catch中打印一下堆栈信息做勉强处理。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="comment">//抛出一个检查异常</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"方法text（）中的Exception"</span>)；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
     </div>
 </article>
@@ -372,21 +386,21 @@
         <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
             <ul class="nav nav-pills pills-gal">
                 <li class="">
-                    <a href="/2018/07/02/javaweb1/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                    <a href="/2018/07/06/java异常体系/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
                 </li>
                 <li class="">
-                    <a href="/2018/07/02/javaweb1/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                    <a href="/2018/07/06/java异常体系/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
                 </li>
                 <li class="">
-                    <a href="/2018/07/02/javaweb1/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                    <a href="/2018/07/06/java异常体系/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
     
-    <a href="/tags/javaweb/" style="font-size: 13.444768579957657px;" class="tag-cloud-link">javaweb</a>
+    <a href="/tags/javaweb/" style="font-size: 13.4040604712491px;" class="tag-cloud-link">javaweb</a>
     
-    <a href="/tags/javase/" style="font-size: 12.693724248021784px;" class="tag-cloud-link">javase</a>
+    <a href="/tags/javase/" style="font-size: 12.751393006377654px;" class="tag-cloud-link">javase</a>
     
 </div>
                 <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
