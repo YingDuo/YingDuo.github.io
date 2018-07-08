@@ -155,11 +155,11 @@
                         
                         
                         <li>
-                            <a href="/tags/javaweb/">javaweb</a>
+                            <a href="/tags/javase/">javase</a>
                         </li>
                         
                         <li>
-                            <a href="/tags/javase/">javase</a>
+                            <a href="/tags/javaweb/">javaweb</a>
                         </li>
                         
                         
@@ -253,6 +253,31 @@
 <h2 id="3-throw和throws"><a href="#3-throw和throws" class="headerlink" title="3.throw和throws"></a>3.throw和throws</h2><p>throw关键字是用于方法体内部，用来抛出一个Throwable类型的异常。如果抛出了检查异常，则还应该在方法头部声明方法可能抛出的异常类型。该方法的调用者也必须检查处理抛出的异常。如果所有方法都层层上抛获取的异常，最终JVM会进行处理。处理也很简单，就是打印异常消息和堆栈信息。如果抛出的是Error或RuntimeException，则该方法的调用者可选择处理该异常</p>
 <p>throws关键字用于方法体外部的方法声明部分，用来声明方法可能会抛出某些异常。仅当抛出了检查异常，该方法的调用者才必须处理或者重新抛出该异常。当方法的调用者无力处理该异常时，应该继续抛出，而不是在catch中打印一下堆栈信息做勉强处理。</p>
 <figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="comment">//抛出一个检查异常</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"方法text（）中的Exception"</span>)；</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-Throwable类中的常用方法"><a href="#4-Throwable类中的常用方法" class="headerlink" title="4.Throwable类中的常用方法"></a>4.Throwable类中的常用方法</h2><p>getCause();返回抛出异常的原因，如果cause不存在或未知，返回null。</p>
+<p>getMessage():返回异常的消息信息。</p>
+<p>printStackTrace():对象的堆栈跟踪输出至错误输出流，作为字段System.err的值。</p>
+<h1 id="三、异常处理的一般原则"><a href="#三、异常处理的一般原则" class="headerlink" title="三、异常处理的一般原则"></a>三、异常处理的一般原则</h1><p>1.能处理就早处理，抛不出去还不能处理的就想法消化掉或者转换为RuntimeException处理。因为对于一个应用系统来说，抛出大量异常是有问题的，应该从程序开发角度尽可能地控制异常发生的可能</p>
+<p>2.对于检查异常，如果不能行之有效地处理，还不如转换为RuntimeException抛出。这样也让上层的代码有选择的余地——可处理可不处理。</p>
+<p>3.对于一个应用系统来说，应该有自己的一套异常处理框架，也能得到统一的处理风格，将优雅的异常信息反馈给用户</p>
+<h1 id="四、异常的转译与异常链"><a href="#四、异常的转译与异常链" class="headerlink" title="四、异常的转译与异常链"></a>四、异常的转译与异常链</h1><h2 id="1-异常转译的原理"><a href="#1-异常转译的原理" class="headerlink" title="1.异常转译的原理"></a>1.异常转译的原理</h2><p>异常转译就是将一种异常转换为另一种新的异常，也许这种新的异常更能准确地表达程序发生的异常。在Java中有个概念就是异常原因，异常原因导致当前抛出异常的那个异常对象，几乎所有带异常原因的异常构造方法都使用Throwable类型做参数，这也就为异常的转译提供了直接的支持，因为任何形式的异常和错误都是Throwable的子类。比如将SQLException转换为另外一个新的异常DAOException，可以这么写：</p>
+<p>先自定义一个异常DAOException：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">DAOException</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span></span>&#123;</span><br><span class="line">    <span class="comment">//省略部分代码</span></span><br><span class="line">    public <span class="type">DAOException</span>(<span class="type">String</span> message, <span class="type">Throwable</span> cause)&#123;</span><br><span class="line">        <span class="keyword">super</span>(message, cause);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>比如有一个SQLException类型的异常对象e，要转换为DAOException，可以这么写：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">DAOException daoEx</span> = new DAOException(“SQL异常”，e);</span><br></pre></td></tr></table></figure>
+<p>异常转译是针对所有继承Throwable超类的类而言的，从编程的语法角度讲，其子类之间都可以相互转换。但是，从合理性和系统设计角度考虑，可将异常分为三类：Error、Exception、RuntimeException。</p>
+<h2 id="2-异常链"><a href="#2-异常链" class="headerlink" title="2.异常链"></a>2.异常链</h2><p>异常链顾名思义就是将异常发生的原因一个传一个串起来，即把底层的异常信息传给上层，这样逐层抛出。</p>
+<p>例子：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    lowLevelOp();</span><br><span class="line">&#125; <span class="keyword">catch</span>(LowLevelException le)&#123;</span><br><span class="line">    <span class="keyword">throw</span>(HighLevelException)</span><br><span class="line">    <span class="keyword">new</span> <span class="type">HighLevelException</span>().initCause(le);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当程序捕获到了一个底层异常le，在处理部分选择了继续抛出一个更高级别的新异常给此方法的调用者。这样异常的原因就会逐层传递。位于高层的异常递归调用getCuse()方法，就可以遍历各层的异常原因。</p>
+<p>异常链的实际应用很少，发生异常的时候逐层上抛不是个好主意，上层拿到这些异常又能如何，而且逐层上抛异常会消耗大量资源来保存一个完整地异常链信息。</p>
+<h1 id="五、设计一个高效合理地异常处理框架"><a href="#五、设计一个高效合理地异常处理框架" class="headerlink" title="五、设计一个高效合理地异常处理框架"></a>五、设计一个高效合理地异常处理框架</h1><p>对于一个应用系统来说，发生所有异常在用户看来都是应用系统内部的异常，因此应该设计一套应用系统的异常框架以处理系统运行过程中的所有异常。</p>
+<p>方式：用一个自定义异常继承RuntimeException，其他异常转译为该异常，该异常还可以有许多自定义异常子类</p>
+<p>by the way， 有关异常框架设计这方面公认比较好的就是Spring，Spring中的所有异常都可以用org.springframework.core.NestedRuntimeException来表示，并且该基类继承的是RuntimeException。Spring框架很庞大，因此设计了很多NestedRuntimeException的子类，还有异常转换的工具，这些都是非常优秀的设计思想。</p>
+<h1 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h1><p>1、 异常是程序运行过程过程出现的错误，在Java中用类来描述，用对象来表示具体的异常。Java将其区分为Error与Exception，Error是程序无力处理的错误，Exception是程序可以处理的错误。异常处理是为了程序的健壮性。</p>
+<p>2、 Java异常类来自于Java API定义和用户扩展。通过继承Java API异常类可以实现异常的转译。</p>
+<p>3、 异常能处理就处理，不能处理就抛出，最终没有处理的异常JVM会进行处理。</p>
+<p>4、 异常可以传播，也可以相互转译，但应该根据需要选择合理的异常转译的方向。</p>
+<p>5、 对于一个应用系统，设计一套良好的异常处理体系很重要。这一点在系统设计的时候就应该考虑到。</p>
 
     </div>
 </article>
@@ -361,12 +386,6 @@
             
             <li class="list-group-item">
                 <span class="post-title">
-                    <a href="/2018/07/03/javaweb2/">javaweb写一个登录页面</a>
-                </span>
-            </li>
-            
-            <li class="list-group-item">
-                <span class="post-title">
                     <a href="/2018/07/06/java异常体系/">java异常体系</a>
                 </span>
             </li>
@@ -374,6 +393,12 @@
             <li class="list-group-item">
                 <span class="post-title">
                     <a href="/2018/07/02/javaweb1/">第一个javaweb程序，doGet和doPost的区别</a>
+                </span>
+            </li>
+            
+            <li class="list-group-item">
+                <span class="post-title">
+                    <a href="/2018/07/03/javaweb2/">javaweb写一个登录页面</a>
                 </span>
             </li>
             
@@ -398,9 +423,9 @@
             <div class="tab-content">
                 <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
     
-    <a href="/tags/javaweb/" style="font-size: 13.4040604712491px;" class="tag-cloud-link">javaweb</a>
+    <a href="/tags/javase/" style="font-size: 12.210648516898406px;" class="tag-cloud-link">javase</a>
     
-    <a href="/tags/javase/" style="font-size: 12.751393006377654px;" class="tag-cloud-link">javase</a>
+    <a href="/tags/javaweb/" style="font-size: 11.177854503985788px;" class="tag-cloud-link">javaweb</a>
     
 </div>
                 <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
