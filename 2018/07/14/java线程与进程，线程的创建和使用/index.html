@@ -12,7 +12,7 @@
     
     
     
-    <title>标签 | 应铎的博客</title>
+    <title>java线程与进程，线程的创建和使用 | 应铎的博客</title>
     <link href=”https://YingDuo.github.io“ rel=”prefetch” />
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -175,21 +175,34 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 gal-right" id="mainstay">
-                    <!-- 搜索页面(尽可能接近ZanBlog搜索功能) -->
-
-
+                    
 <article class="article well article-body" id="article">
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="https://YingDuo.github.io">应铎的博客</a>
+        >
+        <span>java线程与进程，线程的创建和使用</span>
+    </div>
     <!-- 大型设备详细文章 -->
     <div class="hidden-xs">
         <div class="title-article">
             <h1>
-                <a href="/tags/index.html">标签</a>
+                <a href="/2018/07/14/java线程与进程，线程的创建和使用/">java线程与进程，线程的创建和使用</a>
             </h1>
         </div>
         <div class="tag-article">
+            
             <span class="label label-gal">
-                <i class="fa fa-calendar"></i> 2018-07-03
+                <i class="fa fa-tags"></i>
+                
+                <a href="/tags/javase/">javase</a>
+                
             </span>
+            
+            <span class="label label-gal">
+                <i class="fa fa-calendar"></i> 2018-07-14
+            </span>
+            
         </div>
     </div>
     <!-- 小型设备详细文章 -->
@@ -197,19 +210,37 @@
         <center>
             <div class="title-article">
                 <h4>
-                    <a href="/tags/index.html">标签</a>
+                    <a href="/2018/07/14/java线程与进程，线程的创建和使用/">java线程与进程，线程的创建和使用</a>
                 </h4>
             </div>
             <p>
-                <i class="fa fa-calendar"></i> 2018-07-03
+                <i class="fa fa-calendar"></i> 2018-07-14
+            </p>
+            <p>
+                
+                <i class="fa fa-tags"></i>
+                
+                <a href="/tags/javase/">javase</a>
+                
+                
+                
             </p>
         </center>
     </div>
     <div class="content-article">
-        
+        <h1 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h1><h2 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h2><p><strong>进程是具有一定独立功能的程序关于某个数据集合上的一次运行活动</strong>，进程是系统进行资源分配和调度的一个独立单位。</p>
+<p><strong>线程是进程的一个实体</strong>，是CPU调度和分派的基本单位，它是比进程更小的能独立运行的基本单位。线程自己基本上不拥有系统资源，只拥有一点在运行中必不可少的资源(如程序计数器，一组寄存器和栈)，但是它可与同属一个进程的其他的线程共享进程所拥有的全部资源。</p>
+<h2 id="2-关系"><a href="#2-关系" class="headerlink" title="2.关系"></a>2.关系</h2><p> 一个线程可以创建和撤销另一个线程；同一个进程中的多个线程之间可以并发执行。相对进程而言，线程是一个更加接近于执行体的概念，它可以与同进程中的其他线程共享数据，但拥有自己的栈空间，拥有独立的执行序列。</p>
+<h2 id="3-区别"><a href="#3-区别" class="headerlink" title="3.区别"></a>3.区别</h2><p> 进程和线程的主要差别在于它们是不同的操作系统资源管理方式。进程有独立的地址空间，一个进程崩溃后，在保护模式下不会对其它进程产生影响，而线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程之间没有单独的地址空间，一个线程死掉就等于整个进程死掉，所以多进程的程序要比多线程的程序健壮，但在进程切换时，耗费资源较大，效率要差一些。但<strong>对于一些要求同时进行并且又要共享某些变量的并发操作，只能用线程，不能用进程</strong>。</p>
+<p>1) 简而言之,一个程序至少有一个进程,一个进程至少有一个线程。</p>
+<p>2) 线程的划分尺度小于进程，使得多线程程序的并发性高。</p>
+<p>3) 另外，进程在执行过程中拥有独立的内存单元，而多个线程共享内存，从而极大地提高了程序的运行效率。</p>
+<p>4) 线程在执行过程中与进程还是有区别的。每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口。但是<strong>线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制</strong>。</p>
+<p>5) 从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来实现进程的调度和管理以及资源分配。这就是进程和线程的<strong>重要区别</strong>。</p>
+<h2 id="4-优缺点"><a href="#4-优缺点" class="headerlink" title="4.优缺点"></a>4.优缺点</h2><p>线程和进程在使用上各有优缺点：线程执行开销小，但不利于资源的管理和保护；而进程正相反。同时，线程适合于在SMP机器（多处理器）上运行，而进程则可以跨机器迁移。</p>
+
     </div>
 </article>
-
 
 
                 </div>
@@ -364,23 +395,23 @@
         <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
             <ul class="nav nav-pills pills-gal">
                 <li class="">
-                    <a href="/tags/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                    <a href="/2018/07/14/java线程与进程，线程的创建和使用/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
                 </li>
                 <li class="">
-                    <a href="/tags/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                    <a href="/2018/07/14/java线程与进程，线程的创建和使用/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
                 </li>
                 <li class="">
-                    <a href="/tags/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                    <a href="/2018/07/14/java线程与进程，线程的创建和使用/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
     
-    <a href="/tags/javaweb/" style="font-size: 13.368316324293549px;" class="tag-cloud-link">javaweb</a>
+    <a href="/tags/javaweb/" style="font-size: 8.529367180029988px;" class="tag-cloud-link">javaweb</a>
     
-    <a href="/tags/javase/" style="font-size: 13.199890331458406px;" class="tag-cloud-link">javase</a>
+    <a href="/tags/javase/" style="font-size: 17.635403357540326px;" class="tag-cloud-link">javase</a>
     
-    <a href="/tags/随笔/" style="font-size: 15.690188945772068px;" class="tag-cloud-link">随笔</a>
+    <a href="/tags/随笔/" style="font-size: 10.65060824639766px;" class="tag-cloud-link">随笔</a>
     
 </div>
                 <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
