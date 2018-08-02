@@ -12,7 +12,7 @@
     
     
     
-    <title>Object类源码理解 | 应铎的博客</title>
+    <title>mybatis常考面试题 | 应铎的博客</title>
     <link href=”https://YingDuo.github.io“ rel=”prefetch” />
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -185,13 +185,13 @@
         <i class="fa fa-home"></i>
         <a href="https://YingDuo.github.io">应铎的博客</a>
         >
-        <span>Object类源码理解</span>
+        <span>mybatis常考面试题</span>
     </div>
     <!-- 大型设备详细文章 -->
     <div class="hidden-xs">
         <div class="title-article">
             <h1>
-                <a href="/2018/07/23/Object类源码分析/">Object类源码理解</a>
+                <a href="/2018/08/03/mybatis常考面试题/">mybatis常考面试题</a>
             </h1>
         </div>
         <div class="tag-article">
@@ -199,12 +199,12 @@
             <span class="label label-gal">
                 <i class="fa fa-tags"></i>
                 
-                <a href="/tags/javase/">javase</a>
+                <a href="/tags/java框架/">java框架</a>
                 
             </span>
             
             <span class="label label-gal">
-                <i class="fa fa-calendar"></i> 2018-07-23
+                <i class="fa fa-calendar"></i> 2018-08-03
             </span>
             
         </div>
@@ -214,17 +214,17 @@
         <center>
             <div class="title-article">
                 <h4>
-                    <a href="/2018/07/23/Object类源码分析/">Object类源码理解</a>
+                    <a href="/2018/08/03/mybatis常考面试题/">mybatis常考面试题</a>
                 </h4>
             </div>
             <p>
-                <i class="fa fa-calendar"></i> 2018-07-23
+                <i class="fa fa-calendar"></i> 2018-08-03
             </p>
             <p>
                 
                 <i class="fa fa-tags"></i>
                 
-                <a href="/tags/javase/">javase</a>
+                <a href="/tags/java框架/">java框架</a>
                 
                 
                 
@@ -232,33 +232,63 @@
         </center>
     </div>
     <div class="content-article">
-        <p>今天看Object类源码</p>
-<p>首先，Object类是所有类的超类，所有的对象都继承了Object中的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Object</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">registerNatives</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        registerNatives();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>静态代码块在类初始化时必定会执行，所以对象初始化时会调用这个方法。registerNatives含义是本地注册。native表示该方法的实现java本身并没有完成，而是由C++来完成，形成.dll文件。</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">Class</span>&lt;?&gt; getClass();</span><br></pre></td></tr></table></figure>
-<p>作用：返回一个运行时类，即获得该类的完整名称</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-<p>也是一个本地方法，返回值是对象的一个哈希值</p>
-<p>1.在应用程序执行期间，如果一个对象用于equals()方法的属性没有被修改的话，那么要保证对该对象多次返回的hashcode值要相等。  </p>
-<p>2.如果2个对象通过equals()方法判断的结果为true，那么要保证二者的hashcode值相等。</p>
-<p>3.如果2个对象通过equals()方法判断的结果为false，那么对二者hashcode值是否相等并没有明确要求。如果不相等，那么能够提升散列表的性能。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>由此我们可以知道，如果没有重写hashcode（）方法和equals（）方法的话，利用“= =”和equals()方法比较的结果是一样的。 “= =”比较的是地址，equals()方法比较的是内容这种说法，是片面的。（虽然在最常用的String类中是这样的）</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">native</span> <span class="function">Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException</span>;</span><br></pre></td></tr></table></figure>
-<p>这个也是本地方法。需要注意的是该方法是“浅拷贝”的。</p>
-<p>浅拷贝：如果一个对象内部还有一个引用类型的基本变量，那么再拷贝该对象的时候，只是在通过clone方法新产生的新对象中拷贝一个该基本类型的引用。换句话说，也就是新对象和原对象他们内部都含有一个指向同一对象的引用。</p>
-<p>深拷贝：拷贝对象的时候，如果对象内部含有一个引用类型类型的变量，那么就会再将该引用类型的变量指向的对象复制一份，然后引用该新对象。</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">String</span> toString() &#123;</span><br><span class="line">        <span class="keyword">return</span> getClass().getName() + <span class="string">"@"</span> + <span class="built_in">Integer</span>.toHexString(hashCode());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>返回信息：运行时类的全名+@+哈希码</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="function"><span class="keyword">void</span> <span class="title">notify</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="function"><span class="keyword">void</span> <span class="title">notifyAll</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-<p>这两个方法都是本地方法，前者唤醒一个在当前对象监视器上等待的线程。后者唤醒所有在当前对象监视器上等待的线程。</p>
-<p>这两个方法应当仅仅被拥有对象监视器的线程所调用。而一个线程成为对象的监视器的拥有者有三种方法：</p>
-<p>1.执行该对象上的一个同步方法</p>
-<p>2.执行一个同步在对象上的代码块</p>
-<p>3.执行该对象的类上的静态同步方法</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="function"><span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="function"><span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (timeout &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                                <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            timeout++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        wait(timeout);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="function"><span class="keyword">void</span> <span class="title">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>自行理解<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123; &#125;</span><br></pre></td></tr></table></figure></p>
-<p>垃圾回收器在认为该对象是垃圾对象的时候会调用该方法。子类可以通过重写该方法来达到资源释放的目的。<br>在方法调用过程中出现的异常会被忽略且方法调用会被终止。任何对象的该方法只会被调用一次。</p>
+        <p>网上找的比较全的面试题，今天自己面试时差不多也都问到了，有些细节更底层的地方还要好好挖掘…</p>
+<p>1、#{}和${}的区别是什么？</p>
+<p>答：${}是Properties文件中的变量占位符，它可以用于标签属性值和sql内部，属于静态文本替换，比如${driver}会被静态替换为com.mysql.jdbc.Driver。#{}是sql的参数占位符，Mybatis会将sql中的#{}替换为?号，在sql执行前会使用PreparedStatement的参数设置方法，按序给sql的?号占位符设置参数值，比如ps.setInt(0,parameterValue)，#{item.name}的取值方式为使用反射从参数对象中获取item对象的name属性值，相当于param.getItem().getName()。</p>
+<p>2、Xml映射文件中，除了常见的select|insert|updae|delete标签之外，还有哪些标签？</p>
+<p>答：还有很多其他的标签，<resultmap>、<parametermap>、<sql>、<include>、<selectkey>，加上动态sql的9个标签，trim|where|set|foreach|if|choose|when|otherwise|bind等，其中<sql>为sql片段标签，通过<include>标签引入sql片段，<selectkey>为不支持自增的主键生成策略标签。</selectkey></include></sql></selectkey></include></sql></parametermap></resultmap></p>
+<p>3、最佳实践中，通常一个Xml映射文件，都会写一个Dao接口与之对应，请问，这个Dao接口的工作原理是什么？Dao接口里的方法，参数不同时，方法能重载吗？</p>
+<p>答：Dao接口，就是人们常说的Mapper接口，接口的全限名，就是映射文件中的namespace的值，接口的方法名，就是映射文件中MappedStatement的id值，接口方法内的参数，就是传递给sql的参数。Mapper接口是没有实现类的，当调用接口方法时，接口全限名+方法名拼接字符串作为key值，可唯一定位一个MappedStatement，举例：com.mybatis3.mappers.StudentDao.findStudentById，可以唯一找到namespace为com.mybatis3.mappers.StudentDao下面id = findStudentById的MappedStatement。在Mybatis中，每一个<select>、<insert>、<update>、<delete>标签，都会被解析为一个MappedStatement对象。</delete></update></insert></select></p>
+<p>Dao接口里的方法，是不能重载的，因为是全限名+方法名的保存和寻找策略。Dao接口的工作原理是JDK动态代理，Mybatis运行时会使用JDK动态代理为Dao接口生成代理proxy对象，代理对象proxy会拦截接口方法，转而执行MappedStatement所代表的sql，然后将sql执行结果返回。</p>
+<p>4、Mybatis是如何进行分页的？分页插件的原理是什么？</p>
+<p>答：Mybatis使用RowBounds对象进行分页，它是针对ResultSet结果集执行的内存分页，而非物理分页，可以在sql内直接书写带有物理分页的参数来完成物理分页功能，也可以使用分页插件来完成物理分页。</p>
+<p>分页插件的基本原理是使用Mybatis提供的插件接口，实现自定义插件，在插件的拦截方法内拦截待执行的sql，然后重写sql，根据dialect方言，添加对应的物理分页语句和物理分页参数。</p>
+<p>举例：select <em> from student，拦截sql后重写为：select t.</em> from （select * from student）t limit 0，10</p>
+<p>5、简述Mybatis的插件运行原理，以及如何编写一个插件。</p>
+<p>答：Mybatis仅可以编写针对ParameterHandler、ResultSetHandler、StatementHandler、Executor这4种接口的插件，Mybatis使用JDK的动态代理，为需要拦截的接口生成代理对象以实现接口方法拦截功能，每当执行这4种接口对象的方法时，就会进入拦截方法，具体就是InvocationHandler的invoke()方法，当然，只会拦截那些你指定需要拦截的方法。</p>
+<p>实现Mybatis的Interceptor接口并复写intercept()方法，然后在给插件编写注解，指定要拦截哪一个接口的哪些方法即可，记住，别忘了在配置文件中配置你编写的插件。</p>
+<p>6、Mybatis执行批量插入，能返回数据库主键列表吗？</p>
+<p>答：能，JDBC都能，Mybatis当然也能。</p>
+<p>7、Mybatis动态sql是做什么的？都有哪些动态sql？能简述一下动态sql的执行原理不？</p>
+<p>答：Mybatis动态sql可以让我们在Xml映射文件内，以标签的形式编写动态sql，完成逻辑判断和动态拼接sql的功能，Mybatis提供了9种动态sql标签trim|where|set|foreach|if|choose|when|otherwise|bind。</p>
+<p>其执行原理为，使用OGNL从sql参数对象中计算表达式的值，根据表达式的值动态拼接sql，以此来完成动态sql的功能。</p>
+<p>8、Mybatis是如何将sql执行结果封装为目标对象并返回的？都有哪些映射形式？</p>
+<p>答：第一种是使用<resultmap>标签，逐一定义列名和对象属性名之间的映射关系。第二种是使用sql列的别名功能，将列别名书写为对象属性名，比如T_NAME AS NAME，对象属性名一般是name，小写，但是列名不区分大小写，Mybatis会忽略列名大小写，智能找到与之对应对象属性名，你甚至可以写成T_NAME AS NaMe，Mybatis一样可以正常工作。</resultmap></p>
+<p>有了列名与属性名的映射关系后，Mybatis通过反射创建对象，同时使用反射给对象的属性逐一赋值并返回，那些找不到映射关系的属性，是无法完成赋值的。</p>
+<p>9、Mybatis能执行一对一、一对多的关联查询吗？都有哪些实现方式，以及它们之间的区别。</p>
+<p>答：能，Mybatis不仅可以执行一对一、一对多的关联查询，还可以执行多对一，多对多的关联查询，多对一查询，其实就是一对一查询，只需要把selectOne()修改为selectList()即可；多对多查询，其实就是一对多查询，只需要把selectOne()修改为selectList()即可。</p>
+<p>关联对象查询，有两种实现方式，一种是单独发送一个sql去查询关联对象，赋给主对象，然后返回主对象。另一种是使用嵌套查询，嵌套查询的含义为使用join查询，一部分列是A对象的属性值，另外一部分列是关联对象B的属性值，好处是只发一个sql查询，就可以把主对象和其关联对象查出来。</p>
+<p>那么问题来了，join查询出来100条记录，如何确定主对象是5个，而不是100个？其去重复的原理是<resultmap>标签内的<id>子标签，指定了唯一确定一条记录的id列，Mybatis根据<id>列值来完成100条记录的去重复功能，<id>可以有多个，代表了联合主键的语意。</id></id></id></resultmap></p>
+<p>同样主对象的关联对象，也是根据这个原理去重复的，尽管一般情况下，只有主对象会有重复记录，关联对象一般不会重复。</p>
+<p>举例：下面join查询出来6条记录，一、二列是Teacher对象列，第三列为Student对象列，Mybatis去重复处理后，结果为1个老师6个学生，而不是6个老师6个学生。</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">       t_id    t_name           s_id</span><br><span class="line">|<span class="string">          1 </span>|<span class="string"> teacher      </span>|<span class="string">      38 </span>|</span><br><span class="line">|<span class="string">          1 </span>|<span class="string"> teacher      </span>|<span class="string">      39 </span>|</span><br><span class="line">|<span class="string">          1 </span>|<span class="string"> teacher      </span>|<span class="string">      40 </span>|</span><br><span class="line">|<span class="string">          1 </span>|<span class="string"> teacher      </span>|<span class="string">      41 </span>|</span><br><span class="line">|<span class="string">          1 </span>|<span class="string"> teacher      </span>|<span class="string">      42 </span>|</span><br><span class="line">|<span class="string">          1 </span>|<span class="string"> teacher      </span>|<span class="string">      43 </span>|</span><br></pre></td></tr></table></figure>
+<p>10、Mybatis是否支持延迟加载？如果支持，它的实现原理是什么？</p>
+<p>答：Mybatis仅支持association关联对象和collection关联集合对象的延迟加载，association指的就是一对一，collection指的就是一对多查询。在Mybatis配置文件中，可以配置是否启用延迟加载lazyLoadingEnabled=true|false。</p>
+<p>它的原理是，使用CGLIB创建目标对象的代理对象，当调用目标方法时，进入拦截器方法，比如调用a.getB().getName()，拦截器invoke()方法发现a.getB()是null值，那么就会单独发送事先保存好的查询关联B对象的sql，把B查询上来，然后调用a.setB(b)，于是a的对象b属性就有值了，接着完成a.getB().getName()方法的调用。这就是延迟加载的基本原理。</p>
+<p>当然了，不光是Mybatis，几乎所有的包括Hibernate，支持延迟加载的原理都是一样的。</p>
+<p>11、Mybatis的Xml映射文件中，不同的Xml映射文件，id是否可以重复？</p>
+<p>答：不同的Xml映射文件，如果配置了namespace，那么id可以重复；如果没有配置namespace，那么id不能重复；毕竟namespace不是必须的，只是最佳实践而已。</p>
+<p>原因就是namespace+id是作为Map&lt;String, MappedStatement&gt;的key使用的，如果没有namespace，就剩下id，那么，id重复会导致数据互相覆盖。有了namespace，自然id就可以重复，namespace不同，namespace+id自然也就不同。</p>
+<p>12、Mybatis中如何执行批处理？</p>
+<p>答：使用BatchExecutor完成批处理。（个人认为不全面）</p>
+<p>13、Mybatis都有哪些Executor执行器？它们之间的区别是什么？</p>
+<p>答：Mybatis有三种基本的Executor执行器，SimpleExecutor、ReuseExecutor、BatchExecutor。</p>
+<p>SimpleExecutor：每执行一次update或select，就开启一个Statement对象，用完立刻关闭Statement对象。</p>
+<p>ReuseExecutor：执行update或select，以sql作为key查找Statement对象，存在就使用，不存在就创建，用完后，不关闭Statement对象，而是放置于Map&lt;String, Statement&gt;内，供下一次使用。简言之，就是重复使用Statement对象。</p>
+<p>BatchExecutor：执行update（没有select，JDBC批处理不支持select），将所有sql都添加到批处理中（addBatch()），等待统一执行（executeBatch()），它缓存了多个Statement对象，每个Statement对象都是addBatch()完毕后，等待逐一执行executeBatch()批处理。与JDBC批处理相同。</p>
+<p>作用范围：Executor的这些特点，都严格限制在SqlSession生命周期范围内。</p>
+<p>14、Mybatis中如何指定使用哪一种Executor执行器？</p>
+<p>答：在Mybatis配置文件中，可以指定默认的ExecutorType执行器类型，也可以手动给DefaultSqlSessionFactory的创建SqlSession的方法传递ExecutorType类型参数。</p>
+<p>15、Mybatis是否可以映射Enum枚举类？</p>
+<p>答：Mybatis可以映射枚举类，不单可以映射枚举类，Mybatis可以映射任何对象到表的一列上。映射方式为自定义一个TypeHandler，实现TypeHandler的setParameter()和getResult()接口方法。TypeHandler有两个作用，一是完成从javaType至jdbcType的转换，二是完成jdbcType至javaType的转换，体现为setParameter()和getResult()两个方法，分别代表设置sql问号占位符参数和获取列查询结果。</p>
+<p>16、Mybatis映射文件中，如果A标签通过include引用了B标签的内容，请问，B标签能否定义在A标签的后面，还是说必须定义在A标签的前面？</p>
+<p>答：虽然Mybatis解析Xml映射文件是按照顺序解析的，但是，被引用的B标签依然可以定义在任何地方，Mybatis都可以正确识别。</p>
+<p>原理是，Mybatis解析A标签，发现A标签引用了B标签，但是B标签尚未解析到，尚不存在，此时，Mybatis会将A标签标记为未解析状态，然后继续解析余下的标签，包含B标签，待所有标签解析完毕，Mybatis会重新解析那些被标记为未解析的标签，此时再解析A标签时，B标签已经存在，A标签也就可以正常解析完成了。</p>
+<p>17、简述Mybatis的Xml映射文件和Mybatis内部数据结构之间的映射关系？</p>
+<p>答：Mybatis将所有Xml配置信息都封装到All-In-One重量级对象Configuration内部。在Xml映射文件中，<parametermap>标签会被解析为ParameterMap对象，其每个子元素会被解析为ParameterMapping对象。<resultmap>标签会被解析为ResultMap对象，其每个子元素会被解析为ResultMapping对象。每一个<select>、<insert>、<update>、<delete>标签均会被解析为MappedStatement对象，标签内的sql会被解析为BoundSql对象。</delete></update></insert></select></resultmap></parametermap></p>
+<p>18、为什么说Mybatis是半自动ORM映射工具？它与全自动的区别在哪里？</p>
+<p>答：Hibernate属于全自动ORM映射工具，使用Hibernate查询关联对象或者关联集合对象时，可以根据对象关系模型直接获取，所以它是全自动的。而Mybatis在查询关联对象或关联集合对象时，需要手动编写sql来完成，所以，称之为半自动ORM映射工具。</p>
+<p>面试题看似都很简单，但是想要能正确回答上来，必定是研究过源码且深入的人，而不是仅会使用的人或者用的很熟的人，以上所有面试题及其答案所涉及的内容，在我的Mybatis系列博客中都有详细讲解和原理分析。</p>
 
     </div>
 </article>
@@ -440,25 +470,25 @@
         <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
             <ul class="nav nav-pills pills-gal">
                 <li class="">
-                    <a href="/2018/07/23/Object类源码分析/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                    <a href="/2018/08/03/mybatis常考面试题/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
                 </li>
                 <li class="">
-                    <a href="/2018/07/23/Object类源码分析/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                    <a href="/2018/08/03/mybatis常考面试题/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
                 </li>
                 <li class="">
-                    <a href="/2018/07/23/Object类源码分析/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                    <a href="/2018/08/03/mybatis常考面试题/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
     
-    <a href="/tags/javase/" style="font-size: 11.893449817177942px;" class="tag-cloud-link">javase</a>
+    <a href="/tags/javase/" style="font-size: 13.088222879615788px;" class="tag-cloud-link">javase</a>
     
-    <a href="/tags/javaweb/" style="font-size: 18.143716538407965px;" class="tag-cloud-link">javaweb</a>
+    <a href="/tags/javaweb/" style="font-size: 8.848495120839463px;" class="tag-cloud-link">javaweb</a>
     
-    <a href="/tags/java框架/" style="font-size: 9.986655891692843px;" class="tag-cloud-link">java框架</a>
+    <a href="/tags/java框架/" style="font-size: 10.887685465007396px;" class="tag-cloud-link">java框架</a>
     
-    <a href="/tags/随笔/" style="font-size: 16.354590955436496px;" class="tag-cloud-link">随笔</a>
+    <a href="/tags/随笔/" style="font-size: 12.002882699508138px;" class="tag-cloud-link">随笔</a>
     
 </div>
                 <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">

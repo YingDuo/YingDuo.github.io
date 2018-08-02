@@ -12,7 +12,7 @@
     
     
     
-    <title>Object类源码理解 | 应铎的博客</title>
+    <title>archive_a | 应铎的博客</title>
     <link href=”https://YingDuo.github.io“ rel=”prefetch” />
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -96,7 +96,7 @@
                 
                 
                 
-                <li class="">
+                <li class="current">
                     <a href="/archives">
                         <i class="fa fa-archive"></i>归档
                     </a>
@@ -179,34 +179,19 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 gal-right" id="mainstay">
-                    
-<article class="article well article-body" id="article">
+                    <article class="article well article-body" id="article-archive">
     <div class="breadcrumb">
         <i class="fa fa-home"></i>
         <a href="https://YingDuo.github.io">应铎的博客</a>
         >
-        <span>Object类源码理解</span>
+        <span>归档</span>
     </div>
     <!-- 大型设备详细文章 -->
     <div class="hidden-xs">
         <div class="title-article">
             <h1>
-                <a href="/2018/07/23/Object类源码分析/">Object类源码理解</a>
+                <a href="/archives">归档</a>
             </h1>
-        </div>
-        <div class="tag-article">
-            
-            <span class="label label-gal">
-                <i class="fa fa-tags"></i>
-                
-                <a href="/tags/javase/">javase</a>
-                
-            </span>
-            
-            <span class="label label-gal">
-                <i class="fa fa-calendar"></i> 2018-07-23
-            </span>
-            
         </div>
     </div>
     <!-- 小型设备详细文章 -->
@@ -214,56 +199,55 @@
         <center>
             <div class="title-article">
                 <h4>
-                    <a href="/2018/07/23/Object类源码分析/">Object类源码理解</a>
+                    <a href="/archives">归档</a>
                 </h4>
             </div>
-            <p>
-                <i class="fa fa-calendar"></i> 2018-07-23
-            </p>
-            <p>
-                
-                <i class="fa fa-tags"></i>
-                
-                <a href="/tags/javase/">javase</a>
-                
-                
-                
-            </p>
         </center>
     </div>
-    <div class="content-article">
-        <p>今天看Object类源码</p>
-<p>首先，Object类是所有类的超类，所有的对象都继承了Object中的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Object</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">registerNatives</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        registerNatives();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>静态代码块在类初始化时必定会执行，所以对象初始化时会调用这个方法。registerNatives含义是本地注册。native表示该方法的实现java本身并没有完成，而是由C++来完成，形成.dll文件。</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">Class</span>&lt;?&gt; getClass();</span><br></pre></td></tr></table></figure>
-<p>作用：返回一个运行时类，即获得该类的完整名称</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-<p>也是一个本地方法，返回值是对象的一个哈希值</p>
-<p>1.在应用程序执行期间，如果一个对象用于equals()方法的属性没有被修改的话，那么要保证对该对象多次返回的hashcode值要相等。  </p>
-<p>2.如果2个对象通过equals()方法判断的结果为true，那么要保证二者的hashcode值相等。</p>
-<p>3.如果2个对象通过equals()方法判断的结果为false，那么对二者hashcode值是否相等并没有明确要求。如果不相等，那么能够提升散列表的性能。</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>由此我们可以知道，如果没有重写hashcode（）方法和equals（）方法的话，利用“= =”和equals()方法比较的结果是一样的。 “= =”比较的是地址，equals()方法比较的是内容这种说法，是片面的。（虽然在最常用的String类中是这样的）</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">native</span> <span class="function">Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException</span>;</span><br></pre></td></tr></table></figure>
-<p>这个也是本地方法。需要注意的是该方法是“浅拷贝”的。</p>
-<p>浅拷贝：如果一个对象内部还有一个引用类型的基本变量，那么再拷贝该对象的时候，只是在通过clone方法新产生的新对象中拷贝一个该基本类型的引用。换句话说，也就是新对象和原对象他们内部都含有一个指向同一对象的引用。</p>
-<p>深拷贝：拷贝对象的时候，如果对象内部含有一个引用类型类型的变量，那么就会再将该引用类型的变量指向的对象复制一份，然后引用该新对象。</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">String</span> toString() &#123;</span><br><span class="line">        <span class="keyword">return</span> getClass().getName() + <span class="string">"@"</span> + <span class="built_in">Integer</span>.toHexString(hashCode());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>返回信息：运行时类的全名+@+哈希码</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="function"><span class="keyword">void</span> <span class="title">notify</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="function"><span class="keyword">void</span> <span class="title">notifyAll</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-<p>这两个方法都是本地方法，前者唤醒一个在当前对象监视器上等待的线程。后者唤醒所有在当前对象监视器上等待的线程。</p>
-<p>这两个方法应当仅仅被拥有对象监视器的线程所调用。而一个线程成为对象的监视器的拥有者有三种方法：</p>
-<p>1.执行该对象上的一个同步方法</p>
-<p>2.执行一个同步在对象上的代码块</p>
-<p>3.执行该对象的类上的静态同步方法</p>
-<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="function"><span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="function"><span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (timeout &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">                                <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            timeout++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        wait(timeout);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="function"><span class="keyword">void</span> <span class="title">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>自行理解<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123; &#125;</span><br></pre></td></tr></table></figure></p>
-<p>垃圾回收器在认为该对象是垃圾对象的时候会调用该方法。子类可以通过重写该方法来达到资源释放的目的。<br>在方法调用过程中出现的异常会被忽略且方法调用会被终止。任何对象的该方法只会被调用一次。</p>
-
+    <div class="content-article" style="margin-top: 30px;">
+        
+        
+            <h1 style="font-size: 24px; margin-top: 40px;">2018年</h1>
+            
+        <div class="alert alert-info" style="font-size: 14px; line-height: 2; font-weight: bold;">
+            
+             
+             
+                        <a href="/2018/08/03/mybatis常考面试题/">mybatis常考面试题</a>
+                        <br>
+            
+             
+                        <a href="/2018/07/23/Object类源码分析/">Object类源码理解</a>
+                        <br>
+            
+             
+                        <a href="/2018/07/14/java线程与进程，线程的创建和使用/">java线程与进程，线程的创建和使用</a>
+                        <br>
+            
+             
+                        <a href="/2018/07/10/markdown文件中嵌入图片/">markdown文件中嵌入图片</a>
+                        <br>
+            
+             
+                        <a href="/2018/07/06/java异常体系/">java异常体系</a>
+                        <br>
+            
+             
+                        <a href="/2018/07/03/javaweb2/">javaweb写一个登录页面</a>
+                        <br>
+            
+             
+                        <a href="/2018/07/02/javaweb1/">第一个javaweb程序，doGet和doPost的区别</a>
+                        <br>
+            
+             
+                        <a href="/2018/03/19/First-blog/">First blog</a>
+                        <br>
+            
+                    </div>
+        
     </div>
 </article>
-
-
                 </div>
                 <aside class="col-md-4 gal-left" id="sidebar">
     <!-- 此为sidebar的搜索框, 非搜索结果页面 -->
@@ -440,25 +424,25 @@
         <div class="panel panel-gal hidden-xs" data-aos="fade-up" data-aos-duration="2000">
             <ul class="nav nav-pills pills-gal">
                 <li class="">
-                    <a href="/2018/07/23/Object类源码分析/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
+                    <a href="/archives/2018/08/index.html#sidebar-tags" data-toggle="tab" id="tags-tab">热门标签</a>
                 </li>
                 <li class="">
-                    <a href="/2018/07/23/Object类源码分析/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
+                    <a href="/archives/2018/08/index.html#sidebar-friend-links" data-toggle="tab" id="friend-links-tab">友情链接</a>
                 </li>
                 <li class="">
-                    <a href="/2018/07/23/Object类源码分析/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
+                    <a href="/archives/2018/08/index.html#sidebar-links" data-toggle="tab" id="links-tab">个人链接</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="cloud-tags tab-pane nav bs-sidenav fade" id="sidebar-tags">
     
-    <a href="/tags/javase/" style="font-size: 11.893449817177942px;" class="tag-cloud-link">javase</a>
+    <a href="/tags/javase/" style="font-size: 13.513396218531277px;" class="tag-cloud-link">javase</a>
     
-    <a href="/tags/javaweb/" style="font-size: 18.143716538407965px;" class="tag-cloud-link">javaweb</a>
+    <a href="/tags/javaweb/" style="font-size: 10.441945529887235px;" class="tag-cloud-link">javaweb</a>
     
-    <a href="/tags/java框架/" style="font-size: 9.986655891692843px;" class="tag-cloud-link">java框架</a>
+    <a href="/tags/java框架/" style="font-size: 15.263920328131979px;" class="tag-cloud-link">java框架</a>
     
-    <a href="/tags/随笔/" style="font-size: 16.354590955436496px;" class="tag-cloud-link">随笔</a>
+    <a href="/tags/随笔/" style="font-size: 14.946278586480421px;" class="tag-cloud-link">随笔</a>
     
 </div>
                 <div class="friend-links tab-pane nav bs-sidenav fade" id="sidebar-friend-links">
